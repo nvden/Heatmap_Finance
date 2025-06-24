@@ -26,6 +26,8 @@ def fetch_changes(ticker):
     end = datetime.datetime.today()
     start = end - datetime.timedelta(days=10)
     df = yf.download(ticker, start=start, end=end)
+    st.write(f"Данные для {ticker}:")
+    st.write(df)
 
     if df.empty:
         return None, None
@@ -58,6 +60,8 @@ for name, ticker in assets.items():
     })
 
 df = pd.DataFrame(records)
+st.write("Итоговая таблица изменений:")
+st.write(df)  # Отладочный вывод данных
 
 # Построение тепловой карты
 fig = go.Figure()
