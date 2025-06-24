@@ -29,11 +29,7 @@ def fetch_changes(ticker):
     st.write(f"Данные для {ticker}:")
     st.write(df)
 
-    if df.empty:
-        return None, None
-
-    # Убедимся, что колонка Close есть
-    if "Close" not in df.columns:
+    if df.empty or "Close" not in df.columns:
         return None, None
 
     df = df.copy()
@@ -68,10 +64,10 @@ fig = go.Figure()
 
 for i, row in df.iterrows():
     try:
-        if pd.isna(row['1D %']) and pd.isna(row['1W %']):
+        if pd.isna(row['1D %']) or pd.isna(row['1W %']):
             continue
         text = f"{row['Asset']}\n1D: {row['1D %']:.2f}%\n1W: {row['1W %']:.2f}%"
-        color = "#d62728" if row['1D %'] is not None and row['1D %'] < 0 else "#2ca02c"
+        color = "#d62728" if row['1D %'] < 0 else "#2ca02c"
         fig.add_trace(go.Scatter(
             x=[i % 4], y=[-(i // 4)],
             mode="markers+text",
@@ -79,7 +75,12 @@ for i, row in df.iterrows():
             text=[text], textposition="middle center"
         ))
     except Exception as e:
+        st.write(f"Ошибка при обработке {row['Asset']}: {e}")
         continue
+
+# Обработка случая, если график пустой
+if not fig.data:
+    fig.add_trace(go.Scatter(x=[0], y=[0], text=["Нет данных"], mode="text"))
 
 fig.update_layout(
     title="Тепловая карта по финансовым активам",
