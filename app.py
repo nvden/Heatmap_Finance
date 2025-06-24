@@ -64,10 +64,16 @@ fig = go.Figure()
 
 for i, row in df.iterrows():
     try:
-        if pd.isna(row['1D %']) or pd.isna(row['1W %']):
+        # Показываем актив, если хотя бы одно значение существует
+        if pd.isna(row['1D %']) and pd.isna(row['1W %']):
             continue
-        text = f"{row['Asset']}\n1D: {row['1D %']:.2f}%\n1W: {row['1W %']:.2f}%"
-        color = "#d62728" if row['1D %'] < 0 else "#2ca02c"
+
+        change_1d = f"{row['1D %']:.2f}%" if not pd.isna(row['1D %']) else "N/A"
+        change_1w = f"{row['1W %']:.2f}%" if not pd.isna(row['1W %']) else "N/A"
+
+        text = f"{row['Asset']}\n1D: {change_1d}\n1W: {change_1w}"
+        color = "#d62728" if not pd.isna(row['1D %']) and row['1D %'] < 0 else "#2ca02c"
+
         fig.add_trace(go.Scatter(
             x=[i % 4], y=[-(i // 4)],
             mode="markers+text",
