@@ -13,12 +13,9 @@ assets = {
     "Nasdaq": "^IXIC",
     "Nikkei": "^N225",
     "CSI 500": "000905.SS",
-    "Stoxx50": "^STOXX50E",
     "Gold": "GC=F",
     "Oil Brent": "BZ=F",
     "DXY": "DX-Y.NYB",
-    "VIX": "^VIX",
-    "US10Y": "^TNX",
     "Bitcoin": "BTC-USD",
     "Ethereum": "ETH-USD",
     "Solana": "SOL-USD"
